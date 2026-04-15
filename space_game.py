@@ -26,25 +26,35 @@ def enemies():
              enemy_spacecraft.x = i * 120 + 60
              enemy_spacecraft.y = 50
              enemy_spaceships.append(enemy_spacecraft)
+             clock.schedule(enemies, random.randint(5,6))
             
 
 enemies()
 
 new_enemy_bullet()
 
+score = 0
+
 def draw():
-    screen.blit("space_background2",(0,0))
-    player_spacecraft.draw()
-    for bullet in player_bullets:
-       bullet.draw()
-    for enemy_spacecraft in enemy_spaceships:
-          enemy_spacecraft.draw()
-    for enemy_bullet in enemy_bullets:
-          enemy_bullet.draw()
+      if score < 0:
+          screen.blit("space_game_over_screen.jpeg",(0,0))
+          return
+      screen.blit("space_background2",(0,0))
+      player_spacecraft.draw()
+      for bullet in player_bullets:
+            bullet.draw()
+      for enemy_spacecraft in enemy_spaceships:
+            enemy_spacecraft.draw()
+      for enemy_bullet in enemy_bullets:
+            enemy_bullet.draw()
+      screen.draw.text("score:"+str(score),center = (50,10))
+
+   
 
 
 
 def update():
+    global score
     if keyboard.a and player_spacecraft.x >= 50:
      player_spacecraft.x -= 5
     elif keyboard.d and player_spacecraft.x <= 550:
@@ -55,13 +65,21 @@ def update():
              if bullet.colliderect(enemy_spacecraft):
                    enemy_spaceships.remove(enemy_spacecraft)
                    player_bullets.remove(bullet)
+                   break
     for enemy_bullet in enemy_bullets:
           enemy_bullet.y += 5
-
-             
+    for bullet in player_bullets:
+          if bullet.colliderect(enemy_spacecraft):
+            player_bullets.remove(bullet)
+            enemy_spaceships.remove(enemy_spacecraft)
+            score = score + 1
     for enemy_spacecraft in enemy_spaceships:
           enemy_spacecraft.y += 1
-    
+    for enemy_bullet in enemy_bullets:
+     if enemy_bullet.colliderect(player_spacecraft):
+          score = score - 1
+          
+
 def on_key_down(key):
    if key == keys.SPACE:
         bullet = Actor("player_bullet")
