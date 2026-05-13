@@ -34,7 +34,17 @@ def new_lives():
      clock.schedule(new_lives,random.randint(120,200))
 clock.schedule(new_lives,random.randint(120,200))
 
+pwr_up_list = []
 
+def power_ups():
+     power_up = Actor("mario_power_up")
+     pwr_up_list.append(power_up)
+     power_up.x = 660
+     power_up.y = 420
+     clock.schedule(new_lives,random.randint(120,200))
+clock.schedule(new_lives,random.randint(120,200))
+
+power_ups()
 
 def draw():
     global lives
@@ -48,8 +58,11 @@ def draw():
          obstacle.draw()
     for live in lives_list:
           live.draw()
+    for power_up in pwr_up_list:
+         power_up.draw()
     screen.draw.text("lives:"+str(lives),center = (50,10))
     screen.draw.text("score:"+str(score),center = (50,25))
+
 
 
 
@@ -58,19 +71,27 @@ def on_key_down(key):
     if key == keys.SPACE and mario.y == 400:
         mario.y += -180
 
+power = 0
+power_time = -1
 
 def update():
      global lives
      global score
+     global power
      if lives < 0:
             
              return   
+     if power == 1:
+            power_time = power_time + 1
+            if power_time == 600:
+                 power = 0
+                 power_time = 0
      if mario.y < 400:
         mario.y += 2
      for obstacle in obstacle_list:
         obstacle.y = 420
         obstacle.x += -2
-        if mario.colliderect(obstacle):
+        if mario.colliderect(obstacle) and power == 0:
             lives = lives - 1
             obstacle_list.remove(obstacle)
         if obstacle.x < 0:
@@ -81,6 +102,14 @@ def update():
             if mario.colliderect(live):
                  lives = lives + 1
                  lives_list.remove(live)
+     for power_up in pwr_up_list:
+            power_up.x += -2
+            if mario.colliderect(power_up):
+                 power = 1
+                 pwr_up_list.remove(power_up)
+
+                 
+        
     
      
                     
