@@ -32,7 +32,7 @@ def new_lives():
      live.x = 660
      live.y = 420
      clock.schedule(new_lives,random.randint(120,200))
-clock.schedule(new_lives,random.randint(5,6))
+clock.schedule(new_lives,random.randint(120,200))
 
 
 
@@ -40,7 +40,7 @@ def draw():
     global lives
     global score
     screen.blit("obstacle_game_bg",(0,0))
-    if score < 0:
+    if lives <= 0:
          screen.blit("mario_game_over_screen",(0,0)) 
          return   
     mario.draw()
@@ -55,8 +55,8 @@ def draw():
 
 
 def on_key_down(key):
-    if key == keys.SPACE and mario.y >= 200:
-        mario.y += -100
+    if key == keys.SPACE and mario.y == 400:
+        mario.y += -180
 
 
 def update():
@@ -65,7 +65,7 @@ def update():
      if lives < 0:
             
              return   
-     if mario.y <= 400:
+     if mario.y < 400:
         mario.y += 2
      for obstacle in obstacle_list:
         obstacle.y = 420
@@ -78,6 +78,11 @@ def update():
             score = score + 1
      for live in lives_list:
             live.x += -2
+            if mario.colliderect(live):
+                 lives = lives + 1
+                 lives_list.remove(live)
+    
+     
                     
             
   
