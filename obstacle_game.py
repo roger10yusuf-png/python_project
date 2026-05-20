@@ -11,6 +11,7 @@ mario.y = 400
 
 lives = 3
 score = 0
+time = 10
 
 obstacles = ["plant_obstacle","spikeball_obstacle","spike_obstacle"]
 obstacle_list = []
@@ -41,10 +42,8 @@ def power_ups():
      pwr_up_list.append(power_up)
      power_up.x = 660
      power_up.y = 420
-     clock.schedule(new_lives,random.randint(120,200))
-clock.schedule(new_lives,random.randint(120,200))
-
-power_ups()
+     clock.schedule(power_ups,random.randint(120,200))
+clock.schedule(power_ups,random.randint(120,200))
 
 def draw():
     global lives
@@ -63,6 +62,18 @@ def draw():
     screen.draw.text("lives:"+str(lives),center = (50,10))
     screen.draw.text("score:"+str(score),center = (50,25))
 
+    if power == 1:
+         screen.draw.text("power mode: on",center = (625,20), fontname = "timesnewroman")
+         screen.draw.text("time:"+ str(time),center = (625,40))
+    elif power == 0:
+         screen.draw.text("power mode: off",center = (625,20), fontname = "timesnewroman")
+
+         
+         
+
+                 
+                 
+
 
 
 
@@ -78,11 +89,15 @@ def update():
      global lives
      global score
      global power
+     global power_time 
+     global time    
      if lives < 0:
             
              return   
      if power == 1:
             power_time = power_time + 1
+            if power_time % 60 == 0:
+                   time -= 1
             if power_time == 600:
                  power = 0
                  power_time = 0
@@ -107,6 +122,9 @@ def update():
             if mario.colliderect(power_up):
                  power = 1
                  pwr_up_list.remove(power_up)
+               
+
+
 
                  
         
