@@ -22,6 +22,13 @@ class Ball():
         key = pygame.key.get_pressed()
         if key[pygame.K_d]:
             self.pos[0] += 1
+        elif key[pygame.K_w]:
+            self.pos[1] -= 1
+        elif key[pygame.K_a]:
+            self.pos[0] -= 1
+        elif key[pygame.K_s]:
+            self.pos[1] += 1
+        
 
 
 ball1 = Ball("blue",[300,300],25,0)
