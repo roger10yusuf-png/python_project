@@ -1,4 +1,5 @@
 import pygame
+import time
 
 pygame.init()
 
@@ -8,6 +9,10 @@ bullets2 = []
 screen = pygame.display.set_mode((700,700))
 
 bg_image = pygame.image.load("images/space_background2.png")
+
+font1 = pygame.font.SysFont("arial",15)
+font2 = pygame.font.SysFont("arial",15)
+font3 = pygame.font.SysFont("arial",50)
 
 class Player1(pygame.sprite.Sprite):
     def __init__(self,x1,y1):
@@ -19,6 +24,8 @@ class Player1(pygame.sprite.Sprite):
         self.lives = 3 
    
     def update(self):
+        text1 = font1.render("player1 live(s): "+ str(self.lives), True,(255,255,255))
+        screen.blit(text1,(10,670))
         currenttime = pygame.time.get_ticks()
         key = pygame.key.get_pressed()
         if key[pygame.K_a]:
@@ -44,9 +51,13 @@ class Player2(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = [x2,y2]
         self.lastshot = pygame.time.get_ticks()
+        self.lives = 3 
+    
     
     
     def update(self):
+        text2 = font2.render("player2 live(s): "+ str(self.lives), True, (255,255,255))
+        screen.blit(text2,(10,20))
         currenttime = pygame.time.get_ticks()
         key = pygame.key.get_pressed()
         if key[pygame.K_LEFT]:
@@ -58,6 +69,10 @@ class Player2(pygame.sprite.Sprite):
             bullet2 = Bullet2(self.rect.x + 30, self.rect.y)
             bullet2group.add(bullet2)
             common_group.add(bullet2)
+        collide = pygame.sprite.spritecollide(self, bullet1group, True)
+        for i in collide:
+         self.lives = self.lives - 1
+         break
 
 
 
@@ -67,7 +82,7 @@ class Player2(pygame.sprite.Sprite):
 class Bullet1(pygame.sprite.Sprite):
     def __init__(self,x,y):
         super().__init__()
-        self.image = pygame.image.load("images/player_bullet.png")
+        self.image = pygame.image.load("images/enemy_bullet.png")
         self.rect = self.image.get_rect()
         self.rect.center = (x,y)
     def update(self):
@@ -77,7 +92,7 @@ class Bullet1(pygame.sprite.Sprite):
 class Bullet2(pygame.sprite.Sprite):
     def __init__(self,x,y):
         super().__init__()
-        self.image = pygame.image.load("images/enemy_bullet.png")
+        self.image = pygame.image.load("images/player_bullet.png")
         self.rect = self.image.get_rect()
         self.rect.center = (x,y)
     def update(self):
@@ -106,6 +121,20 @@ while True:
     bullet1group.update()
     bullet2group.update()
     common_group.draw(screen)
+    if player1.lives <= 0:
+        player1.update()
+        text3 = font3.render("Player2 has won.", True,(255,255,255))
+        screen.blit(text3,(150,350))
+        pygame.display.update()
+        time.sleep(5)
+        break
+    elif player2.lives <= 0:
+        player2.update()
+        text3 = font3.render("Player1 has won.", True,(255,255,255))
+        screen.blit(text3,(150,350))
+        pygame.display.update()
+        time.sleep(5)
+        break
 
     pygame.display.update()
 
