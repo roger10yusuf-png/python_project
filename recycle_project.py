@@ -1,5 +1,6 @@
 import pygame
 import random
+import time
 
 score = 0
 lives = 3
@@ -7,6 +8,7 @@ lives = 3
 pygame.init()
 
 font = pygame.font.SysFont("arial", 20)
+font1 = pygame.font.SysFont("bold", 70)
 
 images = ["pencil.png", "cardboard_box.png", "paper_bag.png"]
 
@@ -47,6 +49,7 @@ class Bin(pygame.sprite.Sprite):
         screen.blit(text,(450,40))
         text2 = font.render("your score "+str(score), True, (255,255,255))
         screen.blit(text2, (450,10))
+       
 
         
 
@@ -102,6 +105,20 @@ while True:
     Bin_group.update()
     recyclable_group.draw(screen)
     nonrecyclable_group.draw(screen)
+    if lives <= 0:
+        text3 = font1.render("you lose:(", True, (255,255,255))
+        screen.blit(text3, (190,250))
+        pygame.display.update()
+        time.sleep(5)
+        pygame.quit()
+    if score == 20:
+        text4 = font1.render("you win:)", True, (255,255,255))
+        screen.blit(text4, (190,250))
+        pygame.display.update()
+        time.sleep(5)
+        pygame.quit()
+    
+        
     
     
     
