@@ -24,9 +24,13 @@ class Asteroid(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.speed = 3
+       
 
     def update(self):
           self.rect.y += self.speed
+          if self.rect.y >= 600:
+            spaceship.score = spaceship.score + 1
+            asteroid_group.remove(self)
   
 
 asteroid_group = pygame.sprite.Group()
@@ -43,6 +47,7 @@ class Spaceship(pygame.sprite.Sprite):
       self.rect.x = x
       self.rect.y = y
       self.speed = 2
+      self.score = 0
 
     def update(self):
         Keys = pygame.key.get_pressed()
@@ -57,6 +62,7 @@ class Spaceship(pygame.sprite.Sprite):
         collide = pygame.sprite.spritecollide(self, asteroid_group, True)
         if collide:
               self.lives = self.lives - 1
+
 
 spaceship = Spaceship(270,270)      
 
@@ -84,6 +90,8 @@ while True:
     currenttime = pygame.time.get_ticks()
     text1 = font1.render("your lives: "+str(spaceship.lives), True, (255,255,255))
     screen.blit(text1, (425,15))
+    text2 = font1.render("your score: "+str(spaceship.score), True, (255,255,255))
+    screen.blit(text2, (425,45))
     if spaceship.lives <= 0:
         text = font.render("GAME OVER", True, (255,255,255))
         screen.blit(text, (170,250))
